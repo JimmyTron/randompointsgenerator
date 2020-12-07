@@ -22,7 +22,7 @@ defmodule RandomPointsGenerator.Boundary do
   end
 
   @doc """
-   Sequential update points of  each user in the database using a random integer.
+   Sequentially update points of  each user in the database using a random integer whose value is between 0 and 100
   """
 
   @spec update_users_with_random_points :: {Integer.t(), nil}
@@ -30,8 +30,16 @@ defmodule RandomPointsGenerator.Boundary do
     User
     |> Repo.update_all(
       set: [
-        points: dynamic(fragment("floor(random() * 100 + 1)"))
+        points: dynamic(fragment("floor(random() * 100 + 0)"))
       ]
     )
+  end
+
+  @doc """
+   Returns a tuple of two elements whose values is a list of users and timestamp
+  """
+  @spec view_users :: {list(map()) | [], nil | NaiveDateTime.t()}
+  def view_users() do
+    GenServer.call(:rand_gen, :get_server_info)
   end
 end
