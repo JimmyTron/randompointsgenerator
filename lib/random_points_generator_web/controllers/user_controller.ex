@@ -6,5 +6,4 @@ defmodule RandomPointsGeneratorWeb.UserController do
     {users, timestamp} = Boundary.view_users()
     render(conn, "index.json", users: users, timestamp: timestamp)
   end
-
 end
