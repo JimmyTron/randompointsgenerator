@@ -4,6 +4,7 @@ defmodule RandomPointsGenerator.Application do
   @moduledoc false
 
   use Application
+  alias RandomPointsGenerator.Core
 
   def start(_type, _args) do
     children = [
@@ -12,6 +13,7 @@ defmodule RandomPointsGenerator.Application do
       # Start the Telemetry supervisor
       # Start the PubSub system
       {Phoenix.PubSub, name: RandomPointsGenerator.PubSub},
+      {RandomPointsGenerator.Server, {Core.new(), :rand_gen}},
       # Start the Endpoint (http/https)
       RandomPointsGeneratorWeb.Endpoint
       # Start a worker by calling: RandomPointsGenerator.Worker.start_link(arg)
