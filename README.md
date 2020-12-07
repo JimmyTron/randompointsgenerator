@@ -1,19 +1,101 @@
 # RandomPointsGenerator
 
-To start your Phoenix server:
+This application creates users with points 0 when server starts and then update each user's points with random numbers which are between 0 and 100 after every  minute.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server`
+It allows users to make requests whose response is json object contains users and timestamp.
+
+## Setting up the project
+
+### Prerequiste
+
+To avoid any surprise or errors this project runs on these stacks but anything  above these should work fine:
+
+- elixir v1.11.2
+- phoenix v1.5.6
+- postgresql v12.x
+
+To install the above mentioned depedencies kindly follows the links and follow instructions depending on your system
+
+**Kindly note you can use [asdf](https://github.com/asdf-vm/asdf)  version manage to avoid version collisions in elixir**
+
+Once you are done with the installaton of depedency clone the project into your local machine like so:
+
+via ssh `git@github.com:okothkongo/randompointsgenerator.git`  
+or
+
+via https `https://github.com/okothkongo/randompointsgenerator.git`
+
+## How run this application
+
+* Install dependencies with `mix deps.get`
+* Create,migrate, and seed your database with `mix ecto.setup`
+* Run a quick test to ensure everything is working with `mix test`.It should be all green.
+* Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Response
 
-## Learn more
+The response is a json  object with containing timestamp and an array of users objects like so:
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```json
+{"timestamp":null,
+ "users":[{"id":402,"points":70},
+          {"id":405,"points":41}
+         ]
+}
+```
+
+1. ### timestamp
+
+The timestamp is a string, the value of this is a datetime in this format `yyyy-mm-dd hh:mm:sec`
+
+This time is UTC based.
+
+On  initial request  the value of timestamp is `null` like so:
+
+```json
+{"timestamp":"2020-07-30 17:09:33"
+ "users":[{"id":402,"points":70},
+          {"id":405,"points":41}
+         ]
+}
+```
+
+On any other consecutive requests, the value of timestamp latest request will be the value of
+of time previous request request was made. For instance when you did  a request on was
+`2020-07-30 17:09:33` and you did another request at `2021-10-30 20:00:00` .
+
+The response will be like so:
+
+```json
+{"timestamp":"2020-07-30 17:09:33",
+ "users":[{"id":402,"points":70},
+          {"id":405,"points":41}
+         ]
+}
+```
+
+2. ### users
+
+users is an array of objects with each contain user details, their id and points which are both numbers(integers).
+
+This array can have only of  maximum of two object, meaning it contain 0, 1, or two users objects.
+
+The value of users object is determined by two things:
+
+i. random number used to update each user
+
+ii. random number used to query the database
+
+### i. random number used to update each user
+
+After every minute points of each user in the database is updated to a  random number whose value range between 0 and 100,the points of each user may remain the same or change depending of value of the random number used.
+
+This will greatly affect value on users object, on request made on minute after the previous request.
+
+### ii. random number used to query the database
+
+It is used to filter users being display,user with point greater than this number are select and the pick the first two(order is determined by user points, users with highest points will be fetched)
+
+On each request this number can remain same or change since it is random.
