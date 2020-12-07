@@ -5,7 +5,8 @@ defmodule RandomPointsGeneratorWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", RandomPointsGeneratorWeb do
+  scope "/", RandomPointsGeneratorWeb do
     pipe_through :api
+    resources "/", UserController, only: [:index]
   end
 end
