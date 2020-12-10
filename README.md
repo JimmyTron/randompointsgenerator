@@ -1,8 +1,8 @@
 # RandomPointsGenerator
 
-This application creates users with points 0 when server starts and then update each user's points with random numbers which are between 0 and 100 after every  minute.
+This application creates users with points 0 when the server starts and then updates each user's points with random numbers which are between 0 and 100 after every  minute.
 
-It allows users to make requests whose response is json object contains users and timestamp.
+It allows users to make requests whose response is a json object containing users and timestamp.
 
 ## Setting up the project
 
@@ -36,7 +36,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## Response
 
-The response is a json  object with containing timestamp and an array of users objects like so:
+The response is a json  object that contains a timestamp and an array of user's objects like so:
 
 ```json
 {"timestamp":null,
